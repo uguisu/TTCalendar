@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+	Copyright (c) 2015-2016, hexin0614@gmail.com. All rights reserved.
+	
+	- Compile path
+	 - 1) clean 
+	 - 2) clean->source-compile->make-packages
+	 
+-->
+<project name="AntRemote.Build" default="make-packages" basedir=".">
+
+	<!-- Application properties -->
+	<property file="build.properties" />
+	<!-- Environment -->
+	<!--
+	    As Jenkins's bug 1640: Could not translate environment variable to ANT process,
+	    We will use hard coding path instead:
+	        ${env.CLASSPATH} -> /home/hexin/Classpath
+	-->
+	<property environment="env"/>
+
+	<!-- Declare classpath -->
+	<path id="class.path">
+		<!-- Path for output -->
+		<pathelement location="${basedir}/${ant.src.dir}"/>
+
+		<!-- System CLASSPATH -->
+		<!-- 
+        <fileset dir="${env.CLASSPATH}" />
+        -->
+
+		<fileset dir="${webContent.dir}/WEB-INF/lib">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<!-- Message for compile -->
+	<property name="message.start"                   value="Start" />
+	<property name="message.end"                     value="End" />
+	<property name="message.clear"                   value="Clear" />
+	<property name="message.build"                   value="Compile" />
+	<property name="message.war"                     value="Create WAR file" />
+
+    <!-- Glassfish settings -->
+	<presetdef name="asadmin">
+		<java jar="${glassfish.home}/modules/admin-cli.jar" fork="true" jvm="${java.home}/bin/java" />
+	</presetdef>
+
+	<!-- Initialize compile environment -->
+	<target name="clean" description="Initialize compile environment">
+		<tstamp>
+			<format property="clean-Start" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.clear}${message.start} ${clean-Start}" />
+		<!-- Re-create building folder -->
+		<delete  dir="${build.root.dir}"/>
+		<mkdir   dir="${build.root.dir}" />
+		<!-- Ant working directory -->
+		<mkdir   dir="${ant.src.dir}" />
+		<tstamp>
+			<format property="clean-End" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.clear}${message.end} ${clean-End}" />
+	</target>
+
+	<!-- Compile source code -->
+	<target name="source-compile" depends="clean" description="Java source code compile">
+		<!-- Copy source code to building path -->
+		<tstamp>
+			<format property="source-compile-Start" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.build}${message.start} ${source-compile-Start}" />
+		<delete dir="${ant.src.dir}" />
+		<mkdir dir="${ant.src.dir}" />
+		<copy todir="${ant.src.dir}">
+			<!-- Common source code -->
+			<fileset dir="${src.dir}">
+				<include name="**/*.java" />
+				<include name="**/*.xml" />
+			</fileset>
+			<!-- Settings -->
+			<fileset dir="${settings.dir}">
+				<include name="**/*.xml" />
+				<include name="**/*.properties" />
+			</fileset>
+		</copy>
+		<!-- Compile Process -->
+		<javac
+            srcdir="${ant.src.dir}"
+            destdir="${ant.src.dir}"
+            classpathref="class.path"
+            debug="true"
+            encoding="${build.encode}"
+            optimize="${build.optimize}"
+            deprecation="${build.deprecation}" />
+
+		<!-- Tie jar file -->
+		<!--
+		TODO: can not work if tied into jar file 
+		<jar destfile="${ant.src.dir}/${jar.name}">
+			<fileset dir="${ant.src.dir}" excludes="**/*.java" />
+		</jar>
+		-->
+
+		<tstamp>
+			<format property="source-compile-End" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.build}${message.end} ${source-compile-End}" />
+	</target>
+
+	<!-- Create WAR file -->
+	<target name="make-packages" depends="source-compile" description="Create WAR file">
+		<!-- Create WAR file -->
+		<tstamp>
+			<format property="make-packages-Start" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.war}${message.start} ${make-packages-Start}" />
+
+		<war destfile="${build.root.dir}/${war.name}" webxml="${webContent.dir}/WEB-INF/web.xml">
+
+			<!-- Web pages and/or etc. -->
+			<fileset dir="${webContent.dir}" >
+				<include name="index.jsp" />
+				<include name="resource/**/*" />
+				<include name="WEB-INF/applicationContext.xml" />
+			</fileset>
+			<!-- Include all web app libraries -->
+			<lib dir="${webContent.dir}/WEB-INF/lib" />
+
+			<classes dir="${ant.src.dir}" excludes="**/*.java" />
+		</war>
+
+		<!-- Copy compile result to shared folder -->
+		<copy file="${build.root.dir}/${war.name}" overwrite="true" todir="${sySPath}" />
+
+		<!-- Remove temporary folder -->
+		<delete dir="${build.root.dir}" />
+		<tstamp>
+			<format property="make-packages-End" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.war}${message.end} ${make-packages-End}" />
+	</target>
+
+    <!-- Deploy to Glassfish -->
+	<target name="deploy4Glassfish" depends="make-packages" description="Deploy to Glassfish">
+		<asadmin failonerror="true">
+            <arg value="--passwordfile" />
+            <arg value="${sySPath}/glassFishPw" />
+            <arg value="--user" />
+            <arg value="${glassfish.user}" />
+			<arg value="deploy" />
+			<arg value="--force=true" />
+			<arg value="${sySPath}/${war.name}" />
+		</asadmin>
+	</target>
+
+</project>
