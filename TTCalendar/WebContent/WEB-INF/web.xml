@@ -12,7 +12,7 @@
     <context-param>
         <!-- Clarify the configuration file's path -->
 	    <param-name>contextConfigLocation</param-name>
-	    <param-value>/WEB-INF/applicationContextXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX*.xml</param-value>
+	    <param-value>/WEB-INF/applicationContext*.xml</param-value>
 	</context-param>
 	
 	<filter>
