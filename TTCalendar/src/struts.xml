@@ -7,5 +7,15 @@
 
     <constant name="struts.devMode" value="false" />
 
+    <package name="default" extends="struts-default" namespace="/">
 
+        <!--
+        	Main pages
+        -->
+        <action name="TAM1000Action" class="com.ttCalendar.main.action.TAM1000Action">
+            <result name="success">/index.jsp</result>
+        </action>
+        
+        
+	</package>
 </struts>

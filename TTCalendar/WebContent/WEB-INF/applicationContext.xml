@@ -13,11 +13,8 @@
     <!-- Local datasource -->
 	
 	<!-- Business Logic -->
-    <!--
-    <bean id="PS1000BLogic" class="com.ttCalendar.configuration.businessLogic.PS1000BLogic" scope="prototype">
-        <property name="dbInfoDao" ref="dbInfoDao" />
+    <bean id="TAM1000BLogic" class="com.ttCalendar.main.businessLogic.TAM1000BLogic" scope="prototype">
     </bean>
-    -->
 
 	<!-- Dao layer -->
 	<!-- 
