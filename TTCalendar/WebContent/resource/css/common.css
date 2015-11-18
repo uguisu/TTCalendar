@@ -128,7 +128,18 @@ div.mainLeftContent {
 div.mainCalendarTable {
     width: 100vw;
     height: 100vh;
-    background-color: #FFCCFF;
+}
+
+/*
+ * Calendar Table Base Style
+ */
+table, td, th .CalendarTableBaseStyle {
+    border: 1px #EEEEEE solid;
+    border-collapse: collapse;
+    text-align: left;
+}
+th.columnBaseStyle {
+    width: 13vw;
 }
 
 hr {
@@ -168,4 +179,7 @@ div {
 }
 div.mainLeftContent {
     background-color: #EC8E77;
+}
+div.mainCalendarTable {
+    background-color: #FFCCFF;
 }
