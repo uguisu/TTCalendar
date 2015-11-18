@@ -10,7 +10,6 @@ body {
  * Main Frame
  */
 div.mainFrame {
-    position: relative;
     width: 100vw;
     height: 100vh;
     background-color: #FDFDFD;
@@ -104,19 +103,33 @@ div.mainNavigationBox2#mainNavigationDayButton {
     top:1px;
 }
 
-
-
+/*
+ * mainContentAndTable
+ */
+div.mainContentAndTable {
+    position: fixed;
+    width: 100vw;
+    height:100vh;
+    top: 107px;
+    text-align: left;
+}
 
 /*
  * Left Content
  */
 div.mainLeftContent {
-    position: relative;
+    float: left;
     width: 180px;
     height: 100vh;
 }
-
-
+/*
+ * Calendar Table
+ */
+div.mainCalendarTable {
+    width: 100vw;
+    height: 100vh;
+    background-color: #FFCCFF;
+}
 
 hr {
     border: 1px;
@@ -124,9 +137,6 @@ hr {
     margin: 0;
     padding: 0;
 }
-
-
-
 
 /*
  * Footer
@@ -150,7 +160,6 @@ div.mainFooterRightText {
     margin-right: 6px;
 }
 
-
 /*
  * For Debug
  */
@@ -158,5 +167,5 @@ div {
     border: 0px dashed #73AD21;
 }
 div.mainLeftContent {
-    background-color: #FF0000;
+    background-color: #EC8E77;
 }
