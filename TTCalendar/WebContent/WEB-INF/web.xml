@@ -28,10 +28,14 @@
 	</filter-mapping>
 
 	<welcome-file-list>
-		<welcome-file>/TAM1000Action.action</welcome-file>
+		<welcome-file>/index.html</welcome-file>
 	</welcome-file-list>
 	
 	<jsp-config>
+        <!--
+            Typically, configuring a taglib is neither required nor recommended.
+            The taglib is included in struts-core.jar, and the container will discover it automatically.
+        -->   
 		<taglib>
 	       <taglib-uri>/s</taglib-uri>
 	       <taglib-location>/WEB-INF/struts-tags.tld</taglib-location>
