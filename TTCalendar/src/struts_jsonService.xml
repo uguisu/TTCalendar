@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+
+    <constant name="struts.devMode" value="true" />
+
+    <package name="bugDb" extends="json-default" namespace="/json">
+        <!-- Get system current date -->
+        <action name="TAJ1000Action" class="com.ttCalendar.json.action.TAJ1000Action">
+            <result type="json" />
+        </action>
+
+    </package>
+</struts>

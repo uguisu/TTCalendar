@@ -16,6 +16,9 @@
             <result name="success">/index.jsp</result>
         </action>
         
-        
 	</package>
+	
+	<!-- JSON service -->
+    <include file="struts_jsonService.xml"/>
+	
 </struts>
