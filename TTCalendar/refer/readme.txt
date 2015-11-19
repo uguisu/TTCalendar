@@ -41,6 +41,9 @@ spring-expression-4.0.6.RELEASE.jar
 spring-jdbc-4.0.6.RELEASE.jar
 spring-web-4.0.6.RELEASE.jar
 
+[YUI Compressor]
+yuicompressor-2.4.8.jar
+
 
 ################################################
 ##  Refer links                               ##
