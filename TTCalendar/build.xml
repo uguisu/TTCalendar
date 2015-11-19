@@ -35,14 +35,15 @@
 	</path>
 
 	<!-- Message for compile -->
-	<property name="message.start"                   value="Start" />
-	<property name="message.end"                     value="End" />
+	<property name="message.start"                   value=" Start" />
+	<property name="message.end"                     value=" End  " />
 	<property name="message.clear"                   value="Clear" />
 	<property name="message.build"                   value="Compile" />
 	<property name="message.war"                     value="Create WAR file" />
-	<property name="message.compressJs"              value="Compress JavaScript" />
+	<property name="message.compile-other"           value="Compile other elements" />
+	<property name="message.compressJs"              value="    [Additional compile task] Compress JavaScript" />
+	<property name="message.compressCSS"             value="    [Additional compile task] Compress CSS" />
 	
-
 	<!-- Initialize compile environment -->
 	<target name="clean" description="Initialize compile environment">
 		<tstamp>
@@ -61,7 +62,7 @@
 	</target>
 
 	<!-- Compile source code -->
-	<target name="source-compile" depends="clean" description="Java source code compile">
+	<target name="source-compile" depends="clean" description="Compile Java source code">
 		<!-- Copy source code to building path -->
 		<tstamp>
 			<format property="source-compile-Start" pattern="yyyy/MM/dd HH:mm:ss" />
@@ -105,8 +106,46 @@
 		<echo message="${message.build}${message.end} ${source-compile-End}" />
 	</target>
 
+	<!-- Compile other elements -->
+	<target name="other-compile" depends="source-compile" description="Compile other elements">
+		<tstamp>
+			<format property="compile-other-Start" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.compile-other}${message.start} ${compile-other-Start}" />
+		
+		<!-- Re-create css folder -->
+		<mkdir   dir="${build.work.dir}/${resource.css.dir}" />
+		<!-- Re-create js folder -->
+		<mkdir   dir="${build.work.dir}/${resource.js.dir}" />
+		
+		<!-- Merge CSS files -->
+		<concat destfile="${build.work.dir}/${resource.css.dir}/ttCalendar.css" encoding="utf-8" fixlastline="on">
+			<fileset dir="${webContent.dir}/${resource.css.dir}" includes="common.css" />
+		</concat>
+		<!-- Merge JS files -->
+		<concat destfile="${build.work.dir}/${resource.js.dir}/ttCalendar.js" encoding="utf-8" fixlastline="on">
+			<fileset dir="${webContent.dir}/${resource.js.dir}" includes="jquery-2.1.4.js" />
+		</concat>
+		<!-- Remove useless files -->
+		<delete>
+		    <fileset dir="${build.work.dir}/${resource.css.dir}" excludesfile="${build.work.dir}/${resource.css.dir}/ttCalendar.css"/>
+		</delete>
+		<delete>
+		    <fileset dir="${build.work.dir}/${resource.js.dir}" excludesfile="${build.work.dir}/${resource.js.dir}/ttCalendar.js"/>
+		</delete>
+		
+		<!-- Execute additional compile -->
+		<antcall target="compress-js" />
+		<antcall target="compress-css" />
+		
+		<tstamp>
+			<format property="compile-other-End" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.compile-other}${message.end} ${compile-other-End}" />
+	</target>
+	
 	<!-- Create WAR file -->
-	<target name="make-packages" depends="source-compile" description="Create WAR file">
+	<target name="make-packages" depends="other-compile" description="Create WAR file">
 		<!-- Create WAR file -->
 		<tstamp>
 			<format property="make-packages-Start" pattern="yyyy/MM/dd HH:mm:ss" />
@@ -119,9 +158,15 @@
 			<fileset dir="${webContent.dir}" >
 				<include name="index.jsp" />
 				<include name="index.html" />
-				<include name="resource/**/*" />
+				<include name="resource/page/*" />
 				<include name="WEB-INF/applicationContext*.xml" />
 			</fileset>
+			
+			<!-- Include compress-js&css -->
+			<fileset dir="${build.work.dir}" >
+				<include name="resource/**/*" />
+			</fileset>
+			
 			<!-- Include all web app libraries -->
 			<lib dir="${webContent.dir}/WEB-INF/lib" />
 
@@ -132,23 +177,28 @@
 		<copy file="${build.work.dir}/${war.name}" overwrite="true" todir="${sySPath}" />
 
 		<!-- Remove temporary folder -->
-		<delete dir="${build.work.dir}" />
+		<!-- <delete dir="${build.work.dir}" /> -->
 		<tstamp>
 			<format property="make-packages-End" pattern="yyyy/MM/dd HH:mm:ss" />
 		</tstamp>
 		<echo message="${message.war}${message.end} ${make-packages-End}" />
 	</target>
 
-	<!-- TODO: Additional compile task: Compress JavaScript -->
-	<target name="compress-js" depends="source-compile" description="Compress JavaScript">
+	
+	<!--
+		Optional compile tasks
+	-->
+	
+	<!-- [Additional compile task] Compress JavaScript -->
+	<target name="compress-js" description="[Additional compile task] Compress JavaScript">
 		<tstamp>
 			<format property="compress-js-Start" pattern="yyyy/MM/dd HH:mm:ss" />
 		</tstamp>
 		<echo message="${message.compressJs}${message.start} ${compress-js-Start}" />
 
-		<apply executable="java" parallel="false" failonerror="true" dest="${src.dir}/">
+		<apply executable="java" parallel="false" failonerror="true" dest="${build.work.dir}/${resource.js.dir}">
 			<!-- Compress folders -->
-			<fileset dir="${src.dir}/" includes="js1/*.js" />
+			<fileset dir="${build.work.dir}/${resource.js.dir}" includes="**/*.js" />
 			<arg line="-jar" />
 			<arg path="${yuicompressor}" />
 			<arg line="--charset utf-8" />
@@ -160,6 +210,31 @@
 		<tstamp>
 			<format property="compress-js-End" pattern="yyyy/MM/dd HH:mm:ss" />
 		</tstamp>
-		<echo message="${message.compressJs}${message.start} ${compress-js-End}" />
+		<echo message="${message.compressJs}${message.end} ${compress-js-End}" />
 	</target>
+	
+	<!-- [Additional compile task] Compress CSS -->
+	<target name="compress-css" description="[Additional compile task] Compress CSS">
+		<tstamp>
+			<format property="compress-css-Start" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.compressCSS}${message.start} ${compress-css-Start}" />
+
+		<apply executable="java" parallel="false" failonerror="true" dest="${build.work.dir}/${resource.css.dir}">
+			<!-- Compress folders -->
+			<fileset dir="${build.work.dir}/${resource.css.dir}" includes="**/*.css" />
+			<arg line="-jar" />
+			<arg path="${yuicompressor}" />
+			<arg line="--charset utf-8" />
+			<arg line="-o" />
+			<targetfile />
+			<mapper type="glob" from="*.css" to="*.css" />
+		</apply>
+		
+		<tstamp>
+			<format property="compress-css-End" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.compressCSS}${message.end} ${compress-css-End}" />
+	</target>
+
 </project>
