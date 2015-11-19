@@ -40,11 +40,8 @@
 	<property name="message.clear"                   value="Clear" />
 	<property name="message.build"                   value="Compile" />
 	<property name="message.war"                     value="Create WAR file" />
-
-    <!-- Glassfish settings -->
-	<presetdef name="asadmin">
-		<java jar="${glassfish.home}/modules/admin-cli.jar" fork="true" jvm="${java.home}/bin/java" />
-	</presetdef>
+	<property name="message.compressJs"              value="Compress JavaScript" />
+	
 
 	<!-- Initialize compile environment -->
 	<target name="clean" description="Initialize compile environment">
@@ -53,8 +50,8 @@
 		</tstamp>
 		<echo message="${message.clear}${message.start} ${clean-Start}" />
 		<!-- Re-create building folder -->
-		<delete  dir="${build.root.dir}"/>
-		<mkdir   dir="${build.root.dir}" />
+		<delete  dir="${build.work.dir}"/>
+		<mkdir   dir="${build.work.dir}" />
 		<!-- Ant working directory -->
 		<mkdir   dir="${ant.src.dir}" />
 		<tstamp>
@@ -116,13 +113,14 @@
 		</tstamp>
 		<echo message="${message.war}${message.start} ${make-packages-Start}" />
 
-		<war destfile="${build.root.dir}/${war.name}" webxml="${webContent.dir}/WEB-INF/web.xml">
+		<war destfile="${build.work.dir}/${war.name}" webxml="${webContent.dir}/WEB-INF/web.xml">
 
 			<!-- Web pages and/or etc. -->
 			<fileset dir="${webContent.dir}" >
 				<include name="index.jsp" />
+				<include name="index.html" />
 				<include name="resource/**/*" />
-				<include name="WEB-INF/applicationContext.xml" />
+				<include name="WEB-INF/applicationContext*.xml" />
 			</fileset>
 			<!-- Include all web app libraries -->
 			<lib dir="${webContent.dir}/WEB-INF/lib" />
@@ -131,27 +129,37 @@
 		</war>
 
 		<!-- Copy compile result to shared folder -->
-		<copy file="${build.root.dir}/${war.name}" overwrite="true" todir="${sySPath}" />
+		<copy file="${build.work.dir}/${war.name}" overwrite="true" todir="${sySPath}" />
 
 		<!-- Remove temporary folder -->
-		<delete dir="${build.root.dir}" />
+		<delete dir="${build.work.dir}" />
 		<tstamp>
 			<format property="make-packages-End" pattern="yyyy/MM/dd HH:mm:ss" />
 		</tstamp>
 		<echo message="${message.war}${message.end} ${make-packages-End}" />
 	</target>
 
-    <!-- Deploy to Glassfish -->
-	<target name="deploy4Glassfish" depends="make-packages" description="Deploy to Glassfish">
-		<asadmin failonerror="true">
-            <arg value="--passwordfile" />
-            <arg value="${sySPath}/glassFishPw" />
-            <arg value="--user" />
-            <arg value="${glassfish.user}" />
-			<arg value="deploy" />
-			<arg value="--force=true" />
-			<arg value="${sySPath}/${war.name}" />
-		</asadmin>
-	</target>
+	<!-- TODO: Additional compile task: Compress JavaScript -->
+	<target name="compress-js" depends="source-compile" description="Compress JavaScript">
+		<tstamp>
+			<format property="compress-js-Start" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.compressJs}${message.start} ${compress-js-Start}" />
 
+		<apply executable="java" parallel="false" failonerror="true" dest="${src.dir}/">
+			<!-- Compress folders -->
+			<fileset dir="${src.dir}/" includes="js1/*.js" />
+			<arg line="-jar" />
+			<arg path="${yuicompressor}" />
+			<arg line="--charset utf-8" />
+			<arg line="-o" />
+			<targetfile />
+			<mapper type="glob" from="*.js" to="*.js" />
+		</apply>
+		
+		<tstamp>
+			<format property="compress-js-End" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.compressJs}${message.start} ${compress-js-End}" />
+	</target>
 </project>
