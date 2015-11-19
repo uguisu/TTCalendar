@@ -7,10 +7,14 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+import com.ttCalendar.TTCalendarStaticValue;
 import com.ttCalendar.core.BaseAction;
 
 /**
- * TAJ1000Action Get system current date
+ * TAJ1000Action Get system current date.<br/>
+ * [JSON SAMPLE]<br/>
+ *     {"currentDate":"20151119"}
+ *     
  * @author hexin0614@gmail.com
  */
 public class TAJ1000Action extends BaseAction {
@@ -27,10 +31,11 @@ public class TAJ1000Action extends BaseAction {
 	 */
 	@Override
 	public String process() {
-		
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyyMMdd", Locale.PRC);
+
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern(
+				TTCalendarStaticValue.FORMAT_STYLE_YYYYMMDD, Locale.PRC);
 		currentDate = LocalDate.now().format(dtf);
-		
+
 		return SUCCESS;
 	}
 	
