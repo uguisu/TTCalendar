@@ -4,10 +4,10 @@
 	"http://struts.apache.org/dtds/struts-2.3.dtd">
 
 <struts>
-
     <constant name="struts.devMode" value="true" />
 
-    <package name="bugDb" extends="json-default" namespace="/json">
+    <package name="json" extends="json-default" namespace="/json">
+
         <!-- Get system current date -->
         <action name="TAJ1000Action" class="com.ttCalendar.json.action.TAJ1000Action">
             <result type="json" />
