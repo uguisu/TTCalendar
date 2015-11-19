@@ -16,7 +16,7 @@ mybatis-spring-1.2.2.jar
 servlet-api.jar
 
 [JDBC]
-//TODO: MySQL JDBC
+mysql-connector-java-5.1.35-bin.jar
 
 [Struts2]
 asm-3.3.jar
