@@ -115,8 +115,8 @@
 		
 		<!-- Re-create css folder -->
 		<mkdir   dir="${build.work.dir}/${resource.css.dir}" />
-		<!-- Re-create js folder -->
-		<mkdir   dir="${build.work.dir}/${resource.js.dir}" />
+        <!-- Re-create js folder -->
+        <mkdir   dir="${build.work.dir}/${resource.js.dir}" />
 		
 		<!-- Merge CSS files -->
 		<concat destfile="${build.work.dir}/${resource.css.dir}/ttCalendar.css" encoding="utf-8" fixlastline="on">
@@ -126,13 +126,6 @@
 		<concat destfile="${build.work.dir}/${resource.js.dir}/ttCalendar.js" encoding="utf-8" fixlastline="on">
 			<fileset dir="${webContent.dir}/${resource.js.dir}" includes="jquery-2.1.4.js" />
 		</concat>
-		<!-- Remove useless files -->
-		<delete>
-		    <fileset dir="${build.work.dir}/${resource.css.dir}" excludesfile="${build.work.dir}/${resource.css.dir}/ttCalendar.css"/>
-		</delete>
-		<delete>
-		    <fileset dir="${build.work.dir}/${resource.js.dir}" excludesfile="${build.work.dir}/${resource.js.dir}/ttCalendar.js"/>
-		</delete>
 		
 		<!-- Execute additional compile -->
 		<antcall target="compress-js" />
@@ -177,7 +170,7 @@
 		<copy file="${build.work.dir}/${war.name}" overwrite="true" todir="${sySPath}" />
 
 		<!-- Remove temporary folder -->
-		<!-- <delete dir="${build.work.dir}" /> -->
+		<delete dir="${build.work.dir}" />
 		<tstamp>
 			<format property="make-packages-End" pattern="yyyy/MM/dd HH:mm:ss" />
 		</tstamp>
@@ -195,18 +188,12 @@
 			<format property="compress-js-Start" pattern="yyyy/MM/dd HH:mm:ss" />
 		</tstamp>
 		<echo message="${message.compressJs}${message.start} ${compress-js-Start}" />
-
-		<apply executable="java" parallel="false" failonerror="true" dest="${build.work.dir}/${resource.js.dir}">
-			<!-- Compress folders -->
-			<fileset dir="${build.work.dir}/${resource.js.dir}" includes="**/*.js" />
-			<arg line="-jar" />
-			<arg path="${yuicompressor}" />
-			<arg line="--charset utf-8" />
-			<arg line="-o" />
-			<targetfile />
-			<mapper type="glob" from="*.js" to="*.js" />
-		</apply>
-		
+        <java jar="${yuicompressor}" fork="true">
+            <arg line="--charset utf-8" />
+            <arg value="-o" />
+            <arg value="${build.work.dir}/${resource.js.dir}/ttCalendar.js" />
+            <arg value="${build.work.dir}/${resource.js.dir}/ttCalendar.js"/>
+        </java>
 		<tstamp>
 			<format property="compress-js-End" pattern="yyyy/MM/dd HH:mm:ss" />
 		</tstamp>
@@ -219,18 +206,12 @@
 			<format property="compress-css-Start" pattern="yyyy/MM/dd HH:mm:ss" />
 		</tstamp>
 		<echo message="${message.compressCSS}${message.start} ${compress-css-Start}" />
-
-		<apply executable="java" parallel="false" failonerror="true" dest="${build.work.dir}/${resource.css.dir}">
-			<!-- Compress folders -->
-			<fileset dir="${build.work.dir}/${resource.css.dir}" includes="**/*.css" />
-			<arg line="-jar" />
-			<arg path="${yuicompressor}" />
-			<arg line="--charset utf-8" />
-			<arg line="-o" />
-			<targetfile />
-			<mapper type="glob" from="*.css" to="*.css" />
-		</apply>
-		
+		<java jar="${yuicompressor}" fork="true">
+            <arg line="--charset utf-8" />
+    		<arg value="-o" />
+    		<arg value="${build.work.dir}/${resource.css.dir}/ttCalendar.css" />
+    		<arg value="${build.work.dir}/${resource.css.dir}/ttCalendar.css"/>
+		</java>
 		<tstamp>
 			<format property="compress-css-End" pattern="yyyy/MM/dd HH:mm:ss" />
 		</tstamp>
