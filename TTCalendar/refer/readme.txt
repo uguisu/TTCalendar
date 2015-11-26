@@ -16,7 +16,7 @@ mybatis-spring-1.2.2.jar
 servlet-api.jar
 
 [JDBC]
-
+mysql-connector-java-5.1.35-bin.jar
 
 [Struts2]
 asm-3.3.jar
@@ -40,3 +40,21 @@ spring-core-4.0.6.RELEASE.jar
 spring-expression-4.0.6.RELEASE.jar
 spring-jdbc-4.0.6.RELEASE.jar
 spring-web-4.0.6.RELEASE.jar
+
+[YUI Compressor]
+yuicompressor-2.4.8.jar
+
+
+################################################
+##  Refer links                               ##
+################################################
+[Closure Compiler]
+https://developers.google.com/closure/compiler/index
+https://github.com/google/closure-compiler
+    ->  http://blog.csdn.net/tender001/article/details/7929449
+
+[YUI Compressor]
+http://yui.github.io/yuicompressor/
+https://github.com/yui/yuicompressor/releases
+    ->  https://gist.github.com/jasdeepkhalsa/4503658
+

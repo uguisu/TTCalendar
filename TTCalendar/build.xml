@@ -35,17 +35,15 @@
 	</path>
 
 	<!-- Message for compile -->
-	<property name="message.start"                   value="Start" />
-	<property name="message.end"                     value="End" />
+	<property name="message.start"                   value=" Start" />
+	<property name="message.end"                     value=" End  " />
 	<property name="message.clear"                   value="Clear" />
 	<property name="message.build"                   value="Compile" />
 	<property name="message.war"                     value="Create WAR file" />
-
-    <!-- Glassfish settings -->
-	<presetdef name="asadmin">
-		<java jar="${glassfish.home}/modules/admin-cli.jar" fork="true" jvm="${java.home}/bin/java" />
-	</presetdef>
-
+	<property name="message.compile-other"           value="Compile other elements" />
+	<property name="message.compressJs"              value="    [Additional compile task] Compress JavaScript" />
+	<property name="message.compressCSS"             value="    [Additional compile task] Compress CSS" />
+	
 	<!-- Initialize compile environment -->
 	<target name="clean" description="Initialize compile environment">
 		<tstamp>
@@ -53,8 +51,8 @@
 		</tstamp>
 		<echo message="${message.clear}${message.start} ${clean-Start}" />
 		<!-- Re-create building folder -->
-		<delete  dir="${build.root.dir}"/>
-		<mkdir   dir="${build.root.dir}" />
+		<delete  dir="${build.work.dir}"/>
+		<mkdir   dir="${build.work.dir}" />
 		<!-- Ant working directory -->
 		<mkdir   dir="${ant.src.dir}" />
 		<tstamp>
@@ -64,7 +62,7 @@
 	</target>
 
 	<!-- Compile source code -->
-	<target name="source-compile" depends="clean" description="Java source code compile">
+	<target name="source-compile" depends="clean" description="Compile Java source code">
 		<!-- Copy source code to building path -->
 		<tstamp>
 			<format property="source-compile-Start" pattern="yyyy/MM/dd HH:mm:ss" />
@@ -108,22 +106,60 @@
 		<echo message="${message.build}${message.end} ${source-compile-End}" />
 	</target>
 
+	<!-- Compile other elements -->
+	<target name="other-compile" depends="source-compile" description="Compile other elements">
+		<tstamp>
+			<format property="compile-other-Start" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.compile-other}${message.start} ${compile-other-Start}" />
+		
+		<!-- Re-create css folder -->
+		<mkdir   dir="${build.work.dir}/${resource.css.dir}" />
+        <!-- Re-create js folder -->
+        <mkdir   dir="${build.work.dir}/${resource.js.dir}" />
+		
+		<!-- Merge CSS files -->
+		<concat destfile="${build.work.dir}/${resource.css.dir}/ttCalendar.css" encoding="utf-8" fixlastline="on">
+			<fileset dir="${webContent.dir}/${resource.css.dir}" includes="common.css" />
+		</concat>
+		<!-- Merge JS files -->
+		<concat destfile="${build.work.dir}/${resource.js.dir}/ttCalendar.js" encoding="utf-8" fixlastline="on">
+			<fileset dir="${webContent.dir}/${resource.js.dir}" includes="jquery-2.1.4.js" />
+		</concat>
+		
+		<!-- Execute additional compile -->
+		<antcall target="compress-js" />
+		<antcall target="compress-css" />
+		
+		<tstamp>
+			<format property="compile-other-End" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.compile-other}${message.end} ${compile-other-End}" />
+	</target>
+	
 	<!-- Create WAR file -->
-	<target name="make-packages" depends="source-compile" description="Create WAR file">
+	<target name="make-packages" depends="other-compile" description="Create WAR file">
 		<!-- Create WAR file -->
 		<tstamp>
 			<format property="make-packages-Start" pattern="yyyy/MM/dd HH:mm:ss" />
 		</tstamp>
 		<echo message="${message.war}${message.start} ${make-packages-Start}" />
 
-		<war destfile="${build.root.dir}/${war.name}" webxml="${webContent.dir}/WEB-INF/web.xml">
+		<war destfile="${build.work.dir}/${war.name}" webxml="${webContent.dir}/WEB-INF/web.xml">
 
 			<!-- Web pages and/or etc. -->
 			<fileset dir="${webContent.dir}" >
 				<include name="index.jsp" />
-				<include name="resource/**/*" />
-				<include name="WEB-INF/applicationContext.xml" />
+				<include name="index.html" />
+				<include name="resource/page/*" />
+				<include name="WEB-INF/applicationContext*.xml" />
 			</fileset>
+			
+			<!-- Include compress-js&css -->
+			<fileset dir="${build.work.dir}" >
+				<include name="resource/**/*" />
+			</fileset>
+			
 			<!-- Include all web app libraries -->
 			<lib dir="${webContent.dir}/WEB-INF/lib" />
 
@@ -131,27 +167,55 @@
 		</war>
 
 		<!-- Copy compile result to shared folder -->
-		<copy file="${build.root.dir}/${war.name}" overwrite="true" todir="${sySPath}" />
+		<copy file="${build.work.dir}/${war.name}" overwrite="true" todir="${sySPath}" />
 
 		<!-- Remove temporary folder -->
-		<delete dir="${build.root.dir}" />
+		<delete dir="${build.work.dir}" />
 		<tstamp>
 			<format property="make-packages-End" pattern="yyyy/MM/dd HH:mm:ss" />
 		</tstamp>
 		<echo message="${message.war}${message.end} ${make-packages-End}" />
 	</target>
 
-    <!-- Deploy to Glassfish -->
-	<target name="deploy4Glassfish" depends="make-packages" description="Deploy to Glassfish">
-		<asadmin failonerror="true">
-            <arg value="--passwordfile" />
-            <arg value="${sySPath}/glassFishPw" />
-            <arg value="--user" />
-            <arg value="${glassfish.user}" />
-			<arg value="deploy" />
-			<arg value="--force=true" />
-			<arg value="${sySPath}/${war.name}" />
-		</asadmin>
+	
+	<!--
+		Optional compile tasks
+	-->
+	
+	<!-- [Additional compile task] Compress JavaScript -->
+	<target name="compress-js" description="[Additional compile task] Compress JavaScript">
+		<tstamp>
+			<format property="compress-js-Start" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.compressJs}${message.start} ${compress-js-Start}" />
+        <java jar="${yuicompressor}" fork="true">
+            <arg line="--charset utf-8" />
+            <arg value="-o" />
+            <arg value="${build.work.dir}/${resource.js.dir}/ttCalendar.js" />
+            <arg value="${build.work.dir}/${resource.js.dir}/ttCalendar.js"/>
+        </java>
+		<tstamp>
+			<format property="compress-js-End" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.compressJs}${message.end} ${compress-js-End}" />
+	</target>
+	
+	<!-- [Additional compile task] Compress CSS -->
+	<target name="compress-css" description="[Additional compile task] Compress CSS">
+		<tstamp>
+			<format property="compress-css-Start" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.compressCSS}${message.start} ${compress-css-Start}" />
+		<java jar="${yuicompressor}" fork="true">
+            <arg line="--charset utf-8" />
+    		<arg value="-o" />
+    		<arg value="${build.work.dir}/${resource.css.dir}/ttCalendar.css" />
+    		<arg value="${build.work.dir}/${resource.css.dir}/ttCalendar.css"/>
+		</java>
+		<tstamp>
+			<format property="compress-css-End" pattern="yyyy/MM/dd HH:mm:ss" />
+		</tstamp>
+		<echo message="${message.compressCSS}${message.end} ${compress-css-End}" />
 	</target>
 
 </project>
