@@ -24,11 +24,19 @@
 
             <hr /><%-- Separator line --%>
 
-            <%-- LeftContent Bar [Start] --%>
-            <div class='mainLeftContent' id='mainLeftContent'>
-                <s:include value="resource/page/main/mainLeftContent.jsp"></s:include>
+            <div class='mainContentAndTable' id='mainContentAndTable'>
+	            <%-- LeftContent Bar [Start] --%>
+	            <div class='mainLeftContent' id='mainLeftContent'>
+	                <s:include value="resource/page/main/mainLeftContent.jsp"></s:include>
+	            </div>
+	            <%-- LeftContent Bar [End] --%>
+	            
+                <%-- Calendar Table [Start] --%>
+                <div class='mainCalendarTable' id='mainCalendarTable'>
+                    <s:include value="resource/page/main/mainCalendarTable.jsp"></s:include>
+                </div>
+                <%-- Calendar Table [End] --%>
             </div>
-            <%-- LeftContent Bar [End] --%>
 
             <%-- Footer Bar [Start] --%>
             <div class='mainFooter' id='mainFooter'>
