@@ -7,7 +7,7 @@
     <title>TTCalendar</title>
     <s:include value="resource/page/common_title.jsp"></s:include>
 </head>
-    <body>
+    <body onload='init();'>
         <%-- Basic Frame [Start] --%>
         <div class='mainFrame' id='mainFrame'>
             <%-- Title Bar [Start] --%>
