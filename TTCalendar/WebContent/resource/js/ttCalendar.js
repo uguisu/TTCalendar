@@ -7,13 +7,23 @@ function init() {
 	
 	// Binding default event as function to page elements
 	
-	
 	// TODO: For demo
 	$('#mainNavigationPrevButton').bind('click', function(){
 		commonPost("json/TAJ1000Action", "", function(jData) {
 			alert(jData.currentDate);
 		})
 	});
+	
+
+	// Re-calculate cell's height
+	$( window ).resize(getResizedTable);
+}
+
+/**
+ * Re-calculate cell's height
+ */
+function getResizedTable() {
+	$( '#mainLeftContent' ).append( $(document).height() + "//");
 }
 
 /**
