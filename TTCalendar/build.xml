@@ -125,6 +125,7 @@
 		<!-- Merge JS files -->
 		<concat destfile="${build.work.dir}/${resource.js.dir}/ttCalendar.js" encoding="utf-8" fixlastline="on">
 			<fileset dir="${webContent.dir}/${resource.js.dir}" includes="jquery-2.1.4.js" />
+			<fileset dir="${webContent.dir}/${resource.js.dir}" includes="ttCalendar.js" />
 		</concat>
 		
 		<!-- Execute additional compile -->
