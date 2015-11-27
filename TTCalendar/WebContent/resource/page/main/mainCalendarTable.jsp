@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <div class='mainCalendarTable' id='mainCalendarTable'>
     <div class='lineHead' id='mainCalendarTableWeekdayName'>
-        <table id='CalendarTable' class='CalendarTableBaseStyle'>
+        <table id='CalendarTablelineHead' class='CalendarTableBaseStyle'>
             <tr>
                 <td class='columnBaseStyle'>Sun</td>
                 <td class='columnBaseStyle'>Mon</td>
@@ -13,8 +13,9 @@
             </tr>
         </table>
     </div>
+    
     <div id="line1" class="normalLine">
-        <table id='CalendarTable' class='CalendarTableBaseStyle'>
+        <table id='CalendarTableline1' class='CalendarTableBaseStyle'>
             <tr>
                 <td class='columnBaseStyle'></td>
                 <td class='columnBaseStyle'></td>
@@ -27,7 +28,7 @@
         </table>
     </div>
     <div id="line2" class="normalLine">
-        <table id='CalendarTable' class='CalendarTableBaseStyle'>
+        <table id='CalendarTableline2' class='CalendarTableBaseStyle'>
             <tr>
                 <td class='columnBaseStyle'></td>
                 <td class='columnBaseStyle'></td>
@@ -40,7 +41,7 @@
         </table>
     </div>
     <div id="line3" class="normalLine">
-        <table id='CalendarTable' class='CalendarTableBaseStyle'>
+        <table id='CalendarTableline3' class='CalendarTableBaseStyle'>
             <tr>
                 <td class='columnBaseStyle'></td>
                 <td class='columnBaseStyle'></td>
@@ -53,7 +54,7 @@
         </table>
     </div>
     <div id="line4" class="normalLine">
-        <table id='CalendarTable' class='CalendarTableBaseStyle'>
+        <table id='CalendarTableline4' class='CalendarTableBaseStyle'>
             <tr>
                 <td class='columnBaseStyle'></td>
                 <td class='columnBaseStyle'></td>
@@ -66,7 +67,7 @@
         </table>
     </div>
     <div id="line5" class="normalLine">
-        <table id='CalendarTable' class='CalendarTableBaseStyle'>
+        <table id='CalendarTableline5' class='CalendarTableBaseStyle'>
             <tr>
                 <td class='columnBaseStyle'></td>
                 <td class='columnBaseStyle'></td>
@@ -78,4 +79,5 @@
             </tr>
         </table>
     </div>
+    
 </div>

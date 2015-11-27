@@ -136,20 +136,30 @@ div.lineHead {
     top: 0px;
     height: 25px;
 }
-div.normalLine {
-    height: 20%;
+.normalLine {
+	/* TODO: line setting. Currently, this class just be used as css collector path */
 }
 
 /*
  * Calendar Table Base Style
  */
 table, td .CalendarTableBaseStyle {
-    border: 1px #EEEEEE solid;
     border-collapse: collapse;
     text-align: left;
-    height: 100%
 }
-td.columnBaseStyle {
+/*
+ * Head line style
+ */
+.lineHead td.columnBaseStyle {
+	width: 13vw;
+    border: 0px;
+    border-collapse: collapse;
+	
+}
+/*
+ * Normal line style
+ */
+.normalLine td.columnBaseStyle {
     width: 13vw;
     border: 1px #EEEEEE solid;
     border-collapse: collapse;

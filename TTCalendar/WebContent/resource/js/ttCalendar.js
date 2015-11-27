@@ -16,14 +16,17 @@ function init() {
 	
 
 	// Re-calculate cell's height
-	$( window ).resize(getResizedTable);
+	$(window).resize(getResizedTable);
+	
+	$(document).ready(getResizedTable);
 }
 
 /**
  * Re-calculate cell's height
  */
 function getResizedTable() {
-	$( '#mainLeftContent' ).append( $(document).height() + "//");
+	var calHeight = ($(window).height() - 170) / 5;
+	$('div.normalLine table.CalendarTableBaseStyle td').css("height", calHeight + "px");
 }
 
 /**
