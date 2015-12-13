@@ -44,6 +44,18 @@ spring-web-4.0.6.RELEASE.jar
 [YUI Compressor]
 yuicompressor-2.4.8.jar
 
+################################################
+##  Tomcat                                    ##
+################################################
+    <!-- Xin.He Added -->
+    <Connector port="8443" protocol="HTTP/1.1" SSLEnabled="true"
+               maxThreads="150" scheme="https" secure="true"
+               clientAuth="false" sslProtocol="TLS" 
+               keystoreFile="/hexin/tomcat.keystore"
+               keystorePass="hexin0614" />
+               
+<!-- Xin.He Added -->
+<Context docBase="/home/hexin/workspace/TTCalendar/TTCalendar/WebContent" path="/TTCalendar" reloadable="true"/>
 
 ################################################
 ##  Refer links                               ##
@@ -58,3 +70,5 @@ http://yui.github.io/yuicompressor/
 https://github.com/yui/yuicompressor/releases
     ->  https://gist.github.com/jasdeepkhalsa/4503658
 
+[Servlet]
+https://docs.oracle.com/javaee/6/api/javax/servlet/ServletRequest.html
