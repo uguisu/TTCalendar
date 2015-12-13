@@ -36,7 +36,7 @@
         <!-- Global forward settings -->
 	    <global-results>
 	        <!-- Forbidden page -->
-	        <result name="forbidden">/resource/page/403.jsp</result>
+	        <result name="forbidden">/resource/page/static/403.jsp</result>
 	    </global-results>
 
         <!-- Main pages -->
