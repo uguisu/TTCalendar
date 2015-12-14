@@ -14,7 +14,7 @@
                 <td>Oops, your access has been forbidden!</td>
             </tr>
             <tr>
-                <td>Please go back to the Home page and try again.</td>
+                <td>Please go back to the <a href="https://${pageContext.request.serverName}:8443${pageContext.request.contextPath}">home</a> page and try again.</td>
             </tr>
         </table>
     </div>
