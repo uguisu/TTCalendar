@@ -121,6 +121,7 @@
 		<!-- Merge CSS files -->
 		<concat destfile="${build.work.dir}/${resource.css.dir}/ttCalendar.css" encoding="utf-8" fixlastline="on">
 			<fileset dir="${webContent.dir}/${resource.css.dir}" includes="common.css" />
+			<fileset dir="${webContent.dir}/${resource.css.dir}" includes="common_error.css" />
 		</concat>
 		<!-- Merge JS files -->
 		<concat destfile="${build.work.dir}/${resource.js.dir}/ttCalendar.js" encoding="utf-8" fixlastline="on">
