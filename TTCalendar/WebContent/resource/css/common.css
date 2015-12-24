@@ -33,8 +33,9 @@ div.WebPageName {
     float: left;
     margin-left: 40px;
     margin-top: 10px;
-    font-family:JennaSue46271;
-    font-size: 28px;
+    font-family: dancing-script, sans-serif;
+    font-size: 36px;
+    text-shadow: 1px 1px 5px #FF0000;
 }
 
 /*
