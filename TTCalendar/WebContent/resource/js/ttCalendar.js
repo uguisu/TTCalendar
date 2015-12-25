@@ -5,20 +5,20 @@
 
 function init() {
 	
-	// Binding default event as function to page elements
-	
-	// TODO: For demo
-	$('#mainNavigationPrevButton').bind('click', function(){
-		commonPost("json/TAJ1000Action", "", function(jData) {
-			drawCalendarTable(jData.currentDate);
-		})
-	});
-	
-
-	// Re-calculate cell's height
+	// [1]Re-calculate cell's height
 	$(window).resize(getResizedTable);
-	
 	$(document).ready(getResizedTable);
+	
+	// [2]Get current date from server and draw teh table
+	commonPost("json/TAJ1000Action", "", function(jData) {
+		drawCalendarTable(jData.currentDate);
+	})
+	
+	// [3] Binding default event as function to page elements
+	// [3.1] PrevButton
+	$('#mainNavigationPrevButton').bind('click', function(){
+		// TODO: PrevButton
+	});
 }
 
 /**
