@@ -3,6 +3,9 @@
  * Copyright 2015 hexin0614@gmail.com
  */
 
+
+var WEEK_DAY = new Array("Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday");
+
 function init() {
 	
 	// [1]Re-calculate cell's height
@@ -11,7 +14,7 @@ function init() {
 	
 	// [2]Get current date from server and draw teh table
 	commonPost("json/TAJ1000Action", "", function(jData) {
-		drawCalendarTable(jData.currentDate);
+		drawCalendarTable(jData);
 	})
 	
 	// [3] Binding default event as function to page elements
@@ -65,16 +68,25 @@ function stopAnimationLoading() {
 
 /**
  * Draw calendar table by according to a specified date(YYYYMMDD)
- * @param dateYYYYMMDD Specified date(YYYYMMDD)
+ * @param jData Json data
  */
-function drawCalendarTable(dateYYYYMMDD) {
+function drawCalendarTable(jData) {
 	
 	// The first date of month
-	var firstDate = dateYYYYMMDD.substring(0, 6) + "01";
+	var firstDate = jData.currentDate.substring(0, 6) + "01";
 	
-	alert(getZellerWeekDay(firstDate.substring(0, 4), firstDate.substring(4, 6), "01"));
+	var _yyyyTMP = firstDate.substring(0, 4);
+	var _mmTmp = firstDate.substring(4, 6);
 	
+	// Weekday of the first date
+	var weekdayOfFirstDate = getZellerWeekDay(_yyyyTMP, _mmTmp, "01");
+	// Weekday of the last date
+	var weekdayOfLastDate = getZellerWeekDay(_yyyyTMP, _mmTmp, jData.lengthOfMonth);
 	
+	// For debug
+	alert(WEEK_DAY[weekdayOfFirstDate]);
+	alert(WEEK_DAY[weekdayOfLastDate]);
+	alert(jData.lengthOfMonth);
 }
 
 /**
