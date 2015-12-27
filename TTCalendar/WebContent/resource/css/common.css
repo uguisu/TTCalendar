@@ -155,7 +155,6 @@ table, td .CalendarTableBaseStyle {
 	width: 13vw;
     border: 0px;
     border-collapse: collapse;
-	
 }
 /*
  * Normal line style
@@ -164,6 +163,9 @@ table, td .CalendarTableBaseStyle {
     width: 13vw;
     border: 1px #EEEEEE solid;
     border-collapse: collapse;
+    
+	text-align: left;
+	vertical-align: top;
 }
 
 hr {
