@@ -14,8 +14,11 @@ var DATE_SPLIT_DEFAULT = new Array("", "", "");
 var DATE_SPLIT_CN = new Array("年", "月", "日");
 var DATE_SPLIT_EN = new Array("/", "/", "");
 
+/** == Global variables == */
 /** Array for calendar table */
 var calendarTable = new Array();
+/** Current displaying year and month */
+var displayingYearMonth = "";
 
 function init() {
 	
@@ -25,13 +28,17 @@ function init() {
 	
 	// [2]Get current date from server and draw teh table
 	commonPost("json/TAJ1000Action", "", function(jData) {
-		drawCalendarTable(jData);
+		drawCalendarTable(jData.currentDate);
 	})
 	
 	// [3] Binding default event as function to page elements
 	// [3.1] PrevButton
 	$('#mainNavigationPrevButton').bind('click', function(){
-		// TODO: PrevButton
+		drawCalendarTable(getNextYearMonth(parseInt(displayingYearMonth.substring(0, 4)), parseInt(displayingYearMonth.substring(4, 6)), -1) + "01");
+	});
+	// [3.2] NextButton
+	$('#mainNavigationNextButton').bind('click', function(){
+		drawCalendarTable(getNextYearMonth(parseInt(displayingYearMonth.substring(0, 4)), parseInt(displayingYearMonth.substring(4, 6)), 1) + "01");
 	});
 }
 
@@ -79,12 +86,15 @@ function stopAnimationLoading() {
 
 /**
  * Draw calendar table by according to a specified date(YYYYMMDD)
- * @param jData Json data
+ * @param currentDate
  */
-function drawCalendarTable(jData) {
+function drawCalendarTable(currentDate) {
+	
+	// Update global displaying year and month
+	displayingYearMonth = currentDate.substring(0, 6);
 	
 	// The first date of month
-	var firstDate = jData.currentDate.substring(0, 6) + "01";
+	var firstDate = displayingYearMonth + "01";
 	
 	var _yyyyTmp = firstDate.substring(0, 4);
 	var _yyyyTmpVal = parseInt(_yyyyTmp);
@@ -174,7 +184,17 @@ function getZellerWeekDay(intY, intM, intD) {
 	var K = y % 100;
 	var J = parseInt(y / 100);
 	
-	RTN = (q + 13 * parseInt((m + 1) / 5) + K + parseInt(K / 4) + parseInt(J / 4) - 2 * J) % 7;
+	RTN = (q + parseInt(13 * (m + 1) / 5) + K + parseInt(K / 4) + parseInt(J / 4) - 2 * J) % 7;
+	
+	// TODO Debug
+//	console.log("==getZellerWeekDay[start]==");
+//	console.log("q=" + q);
+//	console.log("m=" + m);
+//	console.log("y=" + y);
+//	console.log("K=" + K);
+//	console.log("J=" + J);
+//	console.log("RTN=" + RTN);
+//	console.log("\n");
 	
 	return WEEK_DAY_REORDER[RTN];
 }
