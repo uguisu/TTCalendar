@@ -125,6 +125,14 @@ div.mainLeftContent {
     width: 180px;
     height: 100%;
 }
+
+div.mainLeftContentYearName {
+	margin-top: 20px;
+	text-align: center;
+	
+	font-size: 30px;
+}
+
 /*
  * Calendar Table
  */

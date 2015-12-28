@@ -1,3 +1,4 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-
-LeftContent
+<div class="mainLeftContentYearName">
+    2015
+</div>
