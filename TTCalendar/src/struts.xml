@@ -8,6 +8,37 @@
 
     <package name="default" extends="struts-default" namespace="/">
 
+        <!--
+            Interceptor declaration and order
+            For more details, refer https://struts.apache.org/docs/interceptors.html
+        -->
+		<interceptors>
+            <!-- HTTPS interceptors -->
+			<interceptor name="https" class="com.ttCalendar.core.interceptor.HttpsInterceptor">
+                <param name="enable">true</param>
+			</interceptor>
+			<!-- POST method interceptors -->
+			<interceptor name="postMethod" class="com.ttCalendar.core.interceptor.PostMethodInterceptor">
+                <param name="forgivePathPatterns">(.*)(TAM)[0-9]{4}(Action).*</param>
+			</interceptor>
+			
+			<!-- Tie to interceptor stack -->
+			<interceptor-stack name="ttCalendarDefault">
+				<interceptor-ref name="https"/>
+				<interceptor-ref name="postMethod"/>
+				<interceptor-ref name="defaultStack"/>
+			</interceptor-stack>
+			
+		</interceptors>
+        <!-- Declare default interceptor stack -->
+        <default-interceptor-ref name="ttCalendarDefault" />
+
+        <!-- Global forward settings -->
+	    <global-results>
+	        <!-- Forbidden page -->
+	        <result name="forbidden">/resource/page/static/403.jsp</result>
+	    </global-results>
+
         <!-- Main pages -->
         <action name="TAM1000Action" class="com.ttCalendar.main.action.TAM1000Action">
             <result name="success">/index.jsp</result>

@@ -7,13 +7,26 @@ function init() {
 	
 	// Binding default event as function to page elements
 	
-	
 	// TODO: For demo
 	$('#mainNavigationPrevButton').bind('click', function(){
 		commonPost("json/TAJ1000Action", "", function(jData) {
 			alert(jData.currentDate);
 		})
 	});
+	
+
+	// Re-calculate cell's height
+	$(window).resize(getResizedTable);
+	
+	$(document).ready(getResizedTable);
+}
+
+/**
+ * Re-calculate cell's height
+ */
+function getResizedTable() {
+	var calHeight = ($(window).height() - 170) / 5;
+	$('div.normalLine table.CalendarTableBaseStyle td').css("height", calHeight + "px");
 }
 
 /**
