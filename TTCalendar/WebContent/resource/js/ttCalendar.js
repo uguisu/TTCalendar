@@ -178,9 +178,9 @@ function getZellerWeekDay(intY, intM, intD) {
 	/** q is the day of the month */
 	var q = intD;
 	var m = intM;
-	m = (m < 3) ? m + 12 : m;
 	var y = intY;
 	y = (m < 3) ? y - 1 : y;
+	m = (m < 3) ? m + 12 : m;
 	var K = y % 100;
 	var J = parseInt(y / 100);
 	
