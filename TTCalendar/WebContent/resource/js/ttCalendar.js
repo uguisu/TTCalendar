@@ -108,7 +108,7 @@ function drawCalendarTable(currentDate) {
   	// Weekday of the last date
 	var weekdayOfLastDate = getZellerWeekDay(_yyyyTmpVal, _mmTmpVal, lengthOfMonth);
 	// Split String Array
-	var splitStringArray = DATE_SPLIT_CN;
+	var splitStringArray = DATE_SPLIT_DEFAULT;
 	
 	calendarTable = new Array(5);
 	var i, j, dayCount = 1;
@@ -117,14 +117,14 @@ function drawCalendarTable(currentDate) {
 	// [1]The first week
 	calendarTable[0] = new Array(7);
 	for(j = weekdayOfFirstDate; j < 7; j++) {
-		calendarTable[0][j] = formatDate("", _mmTmpVal, dayCount++, splitStringArray);
+		calendarTable[0][j] = formatDate(null, null, dayCount++, splitStringArray);
 	}
 	// [2]The following weeks
 	for(i = 1; i < 5; i++) {
 		calendarTable[i] = new Array(7);
 		
 		for(j = 0; j < 7; j++) {
-			calendarTable[i][j] = formatDate("", _mmTmpVal, dayCount++, splitStringArray);
+			calendarTable[i][j] = formatDate(null, null, dayCount++, splitStringArray);
 			if(dayCount > lengthOfMonth) break;
 		}
 	}
@@ -134,7 +134,7 @@ function drawCalendarTable(currentDate) {
 	var _preMmTmpVal = parseInt(_preYearMonth.substring(4, 6));
 	var _prelengthOfMonth = getLengthOfMonth(_preYyyyTmpVal, _preMmTmpVal);
 	for(j = weekdayOfFirstDate - 1; j >= 0; j--) {
-		calendarTable[0][j] = formatDate("", _preMmTmpVal, _prelengthOfMonth--, splitStringArray);
+		calendarTable[0][j] = formatDate(null, null, _prelengthOfMonth--, splitStringArray);
 	}
 	// [4]Next month
 	var _nextYearMonth = getNextYearMonth(_yyyyTmpVal, _mmTmpVal, 1);
@@ -143,7 +143,7 @@ function drawCalendarTable(currentDate) {
 	var _nextlengthOfMonth = getLengthOfMonth(_nextYyyyTmpVal, _nextMmTmpVal);
 	i = 1;
 	for(j = weekdayOfLastDate + 1; j < 7; j++) {
-		calendarTable[4][j] = formatDate("", _nextMmTmpVal, i++, splitStringArray);
+		calendarTable[4][j] = formatDate(null, null, i++, splitStringArray);
 	}
 	
 	// Draw to the page
@@ -154,6 +154,10 @@ function drawCalendarTable(currentDate) {
 			$(normalLineName).html(calendarTable[i][j]);
 		}
 	}
+	
+	// Update year&month name
+	// $("#mainNavigationYearName").html("<tt>" + formatDate(_yyyyTmpVal, _mmTmpVal, null, ["/", "", ""], true) + "</tt>");
+	$("#mainNavigationYearName").html(formatDate(_yyyyTmpVal, _mmTmpVal, null, ["/", "", ""], true));
 }
 
 /**
@@ -185,16 +189,6 @@ function getZellerWeekDay(intY, intM, intD) {
 	var J = parseInt(y / 100);
 	
 	RTN = (q + parseInt(13 * (m + 1) / 5) + K + parseInt(K / 4) + parseInt(J / 4) - 2 * J) % 7;
-	
-	// TODO Debug
-//	console.log("==getZellerWeekDay[start]==");
-//	console.log("q=" + q);
-//	console.log("m=" + m);
-//	console.log("y=" + y);
-//	console.log("K=" + K);
-//	console.log("J=" + J);
-//	console.log("RTN=" + RTN);
-//	console.log("\n");
 	
 	return WEEK_DAY_REORDER[RTN];
 }
@@ -232,11 +226,13 @@ function getLengthOfMonth(year, monthIndex) {
 function formatDate(strYear, intMonth, intDay, splitStringArray, attachHeadZeroFlag) {
 	
 	var _splitStringArray = (null == splitStringArray || 3 != splitStringArray.length) ? DATE_SPLIT_DEFAULT : splitStringArray;
-	var _attachHead = (null == attachHeadZeroFlag || false == attachHeadZeroFlag) ? " " : "0";
-	var _month = (10 > intMonth) ? _attachHead + intMonth : "" + intMonth;
-	var _day = (10 > intDay) ? _attachHead + intDay : "" + intDay;
+	var _attachHead = (null == attachHeadZeroFlag || false == attachHeadZeroFlag) ? "&nbsp;" : "0";
+
+	var _strYear = (null == strYear || "" == strYear) ? "" : strYear + _splitStringArray[0];
+	var _month = (null == intMonth) ? "" : ((10 > intMonth) ? _attachHead + intMonth + _splitStringArray[1] : intMonth + _splitStringArray[1]);
+	var _day = (null == intDay) ? "" : ((10 > intDay) ? _attachHead + intDay + _splitStringArray[2] : intDay + _splitStringArray[2]);
 	
-	return ((null == strYear || "" == strYear) ? "" : strYear + _splitStringArray[0]) + _month + _splitStringArray[1] + _day + _splitStringArray[2];
+	return _strYear + _month + _day;
 }
 
 /**
