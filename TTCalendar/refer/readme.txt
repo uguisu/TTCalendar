@@ -73,9 +73,15 @@ https://github.com/yui/yuicompressor/releases
 [Servlet]
 https://docs.oracle.com/javaee/6/api/javax/servlet/ServletRequest.html
 
-
 [Image]
 Thanks:  https://pixabay.com/zh/users/geralt-9301/
 
-[Adobe Edge Web font]
-https://edgewebfonts.adobe.com
+[Roboto]
+http://www.fontex.org/download/Roboto.ttf
+http://www.fontex.org/download/note-this.ttf
+
+################################################
+##  Unused, just for backup                   ##
+################################################
+[Adobe Edge Web font](Can not access from PRC?)
+https://edgewebfonts.adobe.com(Can not access from PRC?)
