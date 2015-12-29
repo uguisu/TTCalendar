@@ -4,6 +4,10 @@
 <div class='mainNavigationBox1' id='mainNavigationPrevButton'>
 	<a href="#" class='mainNavigationButton'>&lt;</a>
 </div>
+<%-- Year and month --%>
+<div class='mainNavigationBox1' id='mainNavigationYearName'>
+    &nbsp;
+</div>
 <%-- Right button --%>
 <div class='mainNavigationBox1' id='mainNavigationNextButton'>
 	<a href="#" class='mainNavigationButton'>&gt;</a>

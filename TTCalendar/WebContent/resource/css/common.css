@@ -33,7 +33,7 @@ div.WebPageName {
     float: left;
     margin-left: 40px;
     margin-top: 10px;
-    font-family: dancing-script, sans-serif;
+    font-family: Note this;
     font-size: 36px;
     text-shadow: 1px 1px 5px #FF0000;
 }
@@ -107,6 +107,14 @@ div.mainNavigationBox2#mainNavigationDayButton {
     top:1px;
 }
 
+div.mainNavigationBox1#mainNavigationYearName {
+	margin:5px 20px 0 15px;
+	
+    text-align: center;
+    font-size: 28px;
+    font-family: Roboto Condensed;
+}
+
 /*
  * mainContentAndTable
  */
@@ -124,13 +132,6 @@ div.mainLeftContent {
     float: left;
     width: 180px;
     height: 100%;
-}
-
-div.mainLeftContentYearName {
-	margin-top: 20px;
-	text-align: center;
-	
-	font-size: 30px;
 }
 
 /*
@@ -174,6 +175,8 @@ table, td .CalendarTableBaseStyle {
     
 	text-align: left;
 	vertical-align: top;
+	
+	font-family: Roboto Condensed;
 }
 
 hr {
@@ -208,6 +211,7 @@ div.mainFooterRightText {
 /*
  * For Debug
  */
+/*
 div {
     border: 0px dashed #73AD21;
 }
@@ -217,3 +221,4 @@ div.mainLeftContent {
 div.mainCalendarTable {
     background-color: #FFCCFF;
 }
+*/
