@@ -75,6 +75,8 @@ https://docs.oracle.com/javaee/6/api/javax/servlet/ServletRequest.html
 
 [Image]
 Thanks:  https://pixabay.com/zh/users/geralt-9301/
+Thanks:  https://www.iconfinder.com/icons/172626/male_user_icon#size=128
+         License: Attribution-NoDerivs 3.0 Unported (CC BY-ND 3.0)
 
 [Roboto]
 http://www.fontex.org/download/Roboto.ttf
