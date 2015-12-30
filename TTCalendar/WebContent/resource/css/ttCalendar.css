@@ -7,7 +7,3 @@
  
 /* Others */
 @import 'common_error.css';
-
-/* Font */
-@font-face { font-family: Roboto Condensed; src: url('RobotoCondensed-Bold.ttf'); }
-@font-face { font-family: Note this; src: url('Note_this.ttf'); }

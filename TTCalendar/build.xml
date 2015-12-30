@@ -117,6 +117,14 @@
 		<mkdir   dir="${build.work.dir}/${resource.css.dir}" />
         <!-- Re-create js folder -->
         <mkdir   dir="${build.work.dir}/${resource.js.dir}" />
+        <!-- Copy image folder -->
+        <mkdir   dir="${build.work.dir}/${resource.img.dir}" />
+        <copy todir="${build.work.dir}/${resource.img.dir}">
+            <fileset dir="${webContent.dir}/${resource.img.dir}">
+                <include name="**/*.jpg" />
+                <include name="**/*.svg" />
+            </fileset>
+        </copy>
 		
 		<!-- Merge CSS files -->
 		<concat destfile="${build.work.dir}/${resource.css.dir}/ttCalendar.css" encoding="utf-8" fixlastline="on">
@@ -126,6 +134,7 @@
 		<!-- Merge JS files -->
 		<concat destfile="${build.work.dir}/${resource.js.dir}/ttCalendar.js" encoding="utf-8" fixlastline="on">
 			<fileset dir="${webContent.dir}/${resource.js.dir}" includes="jquery-2.1.4.js" />
+			<fileset dir="${webContent.dir}/${resource.js.dir}" includes="ttCalendarStatic.js" />
 			<fileset dir="${webContent.dir}/${resource.js.dir}" includes="ttCalendar.js" />
 		</concat>
 		
@@ -153,7 +162,8 @@
 			<fileset dir="${webContent.dir}" >
 				<include name="index.jsp" />
 				<include name="index.html" />
-				<include name="resource/page/*" />
+				<include name="resource/page/**/*" />
+				<include name="resource/css/*.ttf" />
 				<include name="WEB-INF/applicationContext*.xml" />
 			</fileset>
 			
