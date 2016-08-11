@@ -22,16 +22,17 @@ mysql-connector-java-5.1.35-bin.jar
 asm-3.3.jar
 asm-commons-3.3.jar
 asm-tree-3.3.jar
-commons-fileupload-1.3.1.jar
+commons-fileupload-1.3.2.jar
 commons-io-2.2.jar
-commons-lang3-3.1.jar
+commons-lang3-3.2.jar
 commons-logging-1.1.3.jar
-freemarker-2.3.19.jar
+freemarker-2.3.22.jar
 javassist-3.17.1-GA.jar
 log4j-1.2.17.jar
-ognl-3.0.6.jar
-struts2-core-2.3.16.1.jar
-xwork-core-2.3.16.1.jar
+ognl-3.0.19.jar
+struts2-core-2.3.30.jar
+struts2-json-plugin-2.3.30.jar
+xwork-core-2.3.30.jar
 
 [Spring]
 spring-beans-4.0.6.RELEASE.jar
