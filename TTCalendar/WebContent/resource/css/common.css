@@ -191,6 +191,15 @@ div.mainLeftContent {
     float: left;
     width: 180px;
     height: 100%;
+    margin-right: -100%; /* Allow left content have a static width */
+}
+
+/*
+ * Calendar Table Wrap
+ */
+div.mainCalendarTableWrap {
+	float: left;
+	margin-left: 180px;
 }
 
 /*
