@@ -22,6 +22,25 @@ function init() {
 	$('#mainNavigationNextButton').bind('click', function(){
 		drawCalendarTable(getNextYearMonth(parseInt(displayingYearMonth.substring(0, 4)), parseInt(displayingYearMonth.substring(4, 6)), 1) + "01");
 	});
+	
+	// [3.3] Mouse wheel event
+	$(document).on("mousewheel DOMMouseScroll", function (e) {
+	    var delta = (e.originalEvent.wheelDelta && (e.originalEvent.wheelDelta > 0 ? 1 : -1)) ||  // chrome & ie
+	                (e.originalEvent.detail && (e.originalEvent.detail > 0 ? -1 : 1));            // firefox
+	    if(delta > 0) {
+	        // wheel up
+	    	if(SYSDEBUG) {
+	    		console.log("wheelup");
+	    	}
+	        drawCalendarTable(getNextYearMonth(parseInt(displayingYearMonth.substring(0, 4)), parseInt(displayingYearMonth.substring(4, 6)), -1) + "01");
+	    } else if (delta < 0) {
+	        // wheel down
+	    	if(SYSDEBUG) {
+	    		console.log("wheeldown");
+	    	}
+	        drawCalendarTable(getNextYearMonth(parseInt(displayingYearMonth.substring(0, 4)), parseInt(displayingYearMonth.substring(4, 6)), 1) + "01");
+	    }
+	});
 }
 
 /**
