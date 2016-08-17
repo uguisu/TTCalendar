@@ -4,15 +4,14 @@
  */
 
 function init() {
-	
-	// [1]Re-calculate cell's height
-	$(window).resize(getResizedTable);
-	$(document).ready(getResizedTable);
-	
-	// [2]Get current date from server and draw teh table
+
+	// [1]Get current date from server and draw the table
 	commonPost("json/TAJ1000Action", "", function(jData) {
 		drawCalendarTable(jData.currentDate);
-	})
+	});
+	
+	// [2]Re-calculate cell's height
+	$(window).resize(getResizedTable);
 	
 	// [3] Binding default event as function to page elements
 	// [3.1] PrevButton
@@ -29,8 +28,9 @@ function init() {
  * Re-calculate cell's height
  */
 function getResizedTable() {
-	var calHeight = ($(window).height() - 170) / 5;
+	var calHeight = ($(window).height() - 170) / ttCalendarTemp.weeksInCurrentMonth;
 	$('div.normalLine table.CalendarTableBaseStyle td').css("height", calHeight + "px");
+	// Notice: For addition cells(rows) in calendar table, they will be extruded out of page but not hidden(or removed)
 }
 
 /**
@@ -50,31 +50,39 @@ function drawCalendarTable(currentDate) {
 	var _mmTmp = firstDate.substring(4, 6);
 	var _mmTmpVal = parseInt(_mmTmp);
 	
-	var lengthOfMonth = getLengthOfMonth(_yyyyTmpVal, _mmTmpVal);
+	ttCalendarTemp.lengthOfMonth = getLengthOfMonth(_yyyyTmpVal, _mmTmpVal);
 	
 	// Weekday of the first date
-	var weekdayOfFirstDate = getZellerWeekDay(_yyyyTmpVal, _mmTmpVal, 1);
+	ttCalendarTemp.weekdayOfFirstDate = getZellerWeekDay(_yyyyTmpVal, _mmTmpVal, 1);
   	// Weekday of the last date
-	var weekdayOfLastDate = getZellerWeekDay(_yyyyTmpVal, _mmTmpVal, lengthOfMonth);
+	ttCalendarTemp.weekdayOfLastDate = getZellerWeekDay(_yyyyTmpVal, _mmTmpVal, ttCalendarTemp.lengthOfMonth);
 	// Split String Array
 	var splitStringArray = DATE_SPLIT_DEFAULT;
+	// Calculate how many weeks in current month. Notice: "+0.4" means if the last day of month is just located at the end of
+	// the cell of calendar table, then we should not show a "blank" row at the bottom of table.
+	ttCalendarTemp.weeksInCurrentMonth = Math.round((ttCalendarTemp.lengthOfMonth + ttCalendarTemp.weekdayOfFirstDate) / 7 + 0.4);
 	
-	calendarTable = new Array(5);
+	// Debug
+	if(SYSDEBUG) {
+		console.log(ttCalendarTemp.weeksInCurrentMonth);
+	}
+	
+	calendarTable = new Array(6);
 	var i, j, dayCount = 1;
 
 	// Current month
 	// [1]The first week
 	calendarTable[0] = new Array(7);
-	for(j = weekdayOfFirstDate; j < 7; j++) {
+	for(j = ttCalendarTemp.weekdayOfFirstDate; j < 7; j++) {
 		calendarTable[0][j] = formatDate(null, null, dayCount++, splitStringArray);
 	}
 	// [2]The following weeks
-	for(i = 1; i < 5; i++) {
+	for(i = 1; i < 6; i++) {
 		calendarTable[i] = new Array(7);
 		
 		for(j = 0; j < 7; j++) {
 			calendarTable[i][j] = formatDate(null, null, dayCount++, splitStringArray);
-			if(dayCount > lengthOfMonth) break;
+			if(dayCount > ttCalendarTemp.lengthOfMonth) break;
 		}
 	}
 	// [3]Previous month
@@ -82,7 +90,7 @@ function drawCalendarTable(currentDate) {
 	var _preYyyyTmpVal = parseInt(_preYearMonth.substring(0, 4));
 	var _preMmTmpVal = parseInt(_preYearMonth.substring(4, 6));
 	var _prelengthOfMonth = getLengthOfMonth(_preYyyyTmpVal, _preMmTmpVal);
-	for(j = weekdayOfFirstDate - 1; j >= 0; j--) {
+	for(j = ttCalendarTemp.weekdayOfFirstDate - 1; j >= 0; j--) {
 		calendarTable[0][j] = formatDate(null, null, _prelengthOfMonth--, splitStringArray);
 	}
 	// [4]Next month
@@ -91,13 +99,13 @@ function drawCalendarTable(currentDate) {
 	var _nextMmTmpVal = parseInt(_nextYearMonth.substring(4, 6));
 	var _nextlengthOfMonth = getLengthOfMonth(_nextYyyyTmpVal, _nextMmTmpVal);
 	i = 1;
-	for(j = weekdayOfLastDate + 1; j < 7; j++) {
-		calendarTable[4][j] = formatDate(null, null, i++, splitStringArray);
+	for(j = ttCalendarTemp.weekdayOfLastDate + 1; j < 7; j++) {
+		calendarTable[ttCalendarTemp.weeksInCurrentMonth - 1][j] = formatDate(null, null, i++, splitStringArray);
 	}
 	
 	// Draw to the page
 	var normalLineName = "";
-	for(i = 0; i < 5; i++) {
+	for(i = 0; i < 6; i++) {
 		for(j = 0; j < 7; j++) {
 			normalLineName = "#normalLine" + i + j;
 			$(normalLineName).html(calendarTable[i][j]);
@@ -107,6 +115,9 @@ function drawCalendarTable(currentDate) {
 	// Update year&month name
 	// $("#mainNavigationYearName").html("<tt>" + formatDate(_yyyyTmpVal, _mmTmpVal, null, ["/", "", ""], true) + "</tt>");
 	$("#mainNavigationYearName").html(formatDate(_yyyyTmpVal, _mmTmpVal, null, ["/", "", ""], true));
+	
+	// Re-calculate cell's height
+	getResizedTable();
 }
 
 /**
@@ -137,8 +148,16 @@ function getZellerWeekDay(intY, intM, intD) {
 	var K = y % 100;
 	var J = parseInt(y / 100);
 	
-	RTN = (q + parseInt(13 * (m + 1) / 5) + K + parseInt(K / 4) + parseInt(J / 4) - 2 * J) % 7;
+	// Original method may cause problem when calculation result is a negative value.
+	// Refer: https://en.wikipedia.org/wiki/Zeller%27s_congruence
+	RTN = (q + parseInt(13 * (m + 1) / 5) + K + parseInt(K / 4) + 5 + 6 * J) % 7;
 	
+	// Debug
+	if(SYSDEBUG) {
+		console.log("<<Call getZellerWeekDay>>");
+		console.log("    q=[" + q + "], m=[" + m +"], y=[" + y + "], K=[" + K + "], J=[" + J +"] RTN=[" + RTN + "]");
+	}
+
 	return WEEK_DAY_REORDER[RTN];
 }
 

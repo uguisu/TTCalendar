@@ -4,8 +4,8 @@
  */
 
 /** Weekday name array */
-var WEEK_DAY = new Array("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday");
-var WEEK_DAY_REORDER = new Array(6, 0, 1, 2, 3, 4, 5);
+// var WEEK_DAY = new Array(null, "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday");
+var WEEK_DAY_REORDER = new Array(0, 1, 2, 3, 4, 5, 6);
 /** Total amount of days in each month(The first element is an useless element) */
 var DAY_AMOUNT_ARRAY = new Array(Number.MIN_VALUE, 31, 0, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
 
@@ -19,6 +19,20 @@ var DATE_SPLIT_EN = new Array("/", "/", "");
 var calendarTable = new Array();
 /** Current displaying year and month */
 var displayingYearMonth = "";
+/** Temp data */
+var ttCalendarTemp = {
+	/** length of current month */
+	lengthOfMonth: 0,
+	/** Weekday of the first date */
+	weekdayOfFirstDate: 0,
+	/** Weekday of the last date */
+	weekdayOfLastDate: 0,
+	/** Count weeks in current month */
+	weeksInCurrentMonth: 0
+};
+
+/** Debug flag. TRUE - write log to browser's console */
+var SYSDEBUG = false;
 
 /**
  * Common post method
