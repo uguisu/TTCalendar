@@ -21,8 +21,12 @@ var calendarTable = new Array();
 var displayingYearMonth = "";
 /** Temp data */
 var ttCalendarTemp = {
-	/** length of current month */
+	/** Length of current month */
 	lengthOfMonth: 0,
+	/** Day count of previous month */
+	dayCountOfPreMonth: 0,
+	/** day count of next month */
+	dayCountOfNextMonth: 0,
 	/** Weekday of the first date */
 	weekdayOfFirstDate: 0,
 	/** Weekday of the last date */
@@ -31,7 +35,7 @@ var ttCalendarTemp = {
 	weeksInCurrentMonth: 0
 };
 
-/** Debug flag. TRUE - write log to browser's console */
+/** Debug flag. true - write log to browser's console */
 var SYSDEBUG = false;
 
 /**

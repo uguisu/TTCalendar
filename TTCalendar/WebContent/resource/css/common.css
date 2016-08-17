@@ -246,6 +246,12 @@ table, td .CalendarTableBaseStyle {
 	
 	font-family: Roboto Condensed;
 }
+/*
+ * Other month day
+ */
+.normalLine td.oMonth {
+	background-color: #EFF5FB;
+}
 
 hr {
     border: 1px;

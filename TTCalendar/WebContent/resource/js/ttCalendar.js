@@ -65,6 +65,8 @@ function drawCalendarTable(currentDate) {
 	// Debug
 	if(SYSDEBUG) {
 		console.log(ttCalendarTemp.weeksInCurrentMonth);
+		console.log("weekdayOfFirstDate=[" + ttCalendarTemp.weekdayOfFirstDate + "]");
+		console.log("weekdayOfLastDate=[" + ttCalendarTemp.weekdayOfLastDate + "]");
 	}
 	
 	calendarTable = new Array(6);
@@ -90,17 +92,27 @@ function drawCalendarTable(currentDate) {
 	var _preYyyyTmpVal = parseInt(_preYearMonth.substring(0, 4));
 	var _preMmTmpVal = parseInt(_preYearMonth.substring(4, 6));
 	var _prelengthOfMonth = getLengthOfMonth(_preYyyyTmpVal, _preMmTmpVal);
+	ttCalendarTemp.dayCountOfPreMonth = 0;
 	for(j = ttCalendarTemp.weekdayOfFirstDate - 1; j >= 0; j--) {
 		calendarTable[0][j] = formatDate(null, null, _prelengthOfMonth--, splitStringArray);
+		ttCalendarTemp.dayCountOfPreMonth++;
 	}
 	// [4]Next month
 	var _nextYearMonth = getNextYearMonth(_yyyyTmpVal, _mmTmpVal, 1);
 	var _nextYyyyTmpVal = parseInt(_nextYearMonth.substring(0, 4));
 	var _nextMmTmpVal = parseInt(_nextYearMonth.substring(4, 6));
 	var _nextlengthOfMonth = getLengthOfMonth(_nextYyyyTmpVal, _nextMmTmpVal);
+	ttCalendarTemp.dayCountOfNextMonth = 0;
 	i = 1;
 	for(j = ttCalendarTemp.weekdayOfLastDate + 1; j < 7; j++) {
 		calendarTable[ttCalendarTemp.weeksInCurrentMonth - 1][j] = formatDate(null, null, i++, splitStringArray);
+		ttCalendarTemp.dayCountOfNextMonth++;
+	}
+
+	// Debug
+	if(SYSDEBUG) {
+		console.log("ttCalendarTemp.dayCountOfPreMonth=[" + ttCalendarTemp.dayCountOfPreMonth + "]");
+		console.log("ttCalendarTemp.dayCountOfNextMonth=[" + ttCalendarTemp.dayCountOfNextMonth + "]");
 	}
 	
 	// Draw to the page
@@ -109,6 +121,13 @@ function drawCalendarTable(currentDate) {
 		for(j = 0; j < 7; j++) {
 			normalLineName = "#normalLine" + i + j;
 			$(normalLineName).html(calendarTable[i][j]);
+			if ((i == 0 && ttCalendarTemp.dayCountOfPreMonth > j) || 
+			(i == ttCalendarTemp.weeksInCurrentMonth - 1 && j >= 7 - ttCalendarTemp.dayCountOfNextMonth)) {
+				$(normalLineName).addClass("oMonth");
+			} else {
+				$(normalLineName).removeClass("oMonth");
+			}
+			
 		}
 	}
 	
