@@ -22,25 +22,31 @@ function init() {
 	$('#mainNavigationNextButton').bind('click', function(){
 		drawCalendarTable(getNextYearMonth(parseInt(displayingYearMonth.substring(0, 4)), parseInt(displayingYearMonth.substring(4, 6)), 1) + "01");
 	});
+	// [3.3] Bind event
+	bindEventWhenSwitchToMonth();
 	
-	// [3.3] Mouse wheel event
-	$(document).on("mousewheel DOMMouseScroll", function (e) {
-	    var delta = (e.originalEvent.wheelDelta && (e.originalEvent.wheelDelta > 0 ? 1 : -1)) ||  // chrome & ie
-	                (e.originalEvent.detail && (e.originalEvent.detail > 0 ? -1 : 1));            // firefox
-	    if(delta > 0) {
-	        // wheel up
-	    	if(SYSDEBUG) {
-	    		console.log("wheelup");
-	    	}
-	        drawCalendarTable(getNextYearMonth(parseInt(displayingYearMonth.substring(0, 4)), parseInt(displayingYearMonth.substring(4, 6)), -1) + "01");
-	    } else if (delta < 0) {
-	        // wheel down
-	    	if(SYSDEBUG) {
-	    		console.log("wheeldown");
-	    	}
-	        drawCalendarTable(getNextYearMonth(parseInt(displayingYearMonth.substring(0, 4)), parseInt(displayingYearMonth.substring(4, 6)), 1) + "01");
-	    }
+	// [3.4] Month button
+	$('#mainNavigationMonthButton').bind('click', function(){
+    	if(SYSDEBUG) {
+    		console.log("Month button");
+    	}
+    	// Show monthly view
+    	$('#mainCalendarTableWrap').show();
+    	// bind event
+    	bindEventWhenSwitchToMonth();
 	});
+	// [3.5] Year button
+	$('#mainNavigationYearButton').bind('click', function(){
+    	if(SYSDEBUG) {
+    		console.log("Year button");
+    	}
+    	// Hide monthly view
+    	$('#mainCalendarTableWrap').hide();
+    	
+    	// bind event
+    	bindEventWhenSwitchToYear();
+	});
+	
 }
 
 /**
@@ -270,4 +276,67 @@ function getNextYearMonth(year, month, offSet) {
 		}
 	}
 	return formatDate(_year, _month, 1, null, true).substring(0, 6);
+}
+
+
+function bindEventWhenSwitchToMonth() {
+	// [1] Bind wheel event
+	$(document).off("mousewheel DOMMouseScroll", mouseWheelEventForYear);
+	$(document).on("mousewheel DOMMouseScroll", mouseWheelEventForMonth);
+}
+function bindEventWhenSwitchToYear() {
+	// [1] Bind wheel event
+	$(document).off("mousewheel DOMMouseScroll", mouseWheelEventForMonth);
+	$(document).on("mousewheel DOMMouseScroll", mouseWheelEventForYear);
+}
+
+
+/**
+ * Mouse Wheel Event For Month View
+ * @param e event
+ */
+function mouseWheelEventForMonth(e) {
+	
+    var delta = (e.originalEvent.wheelDelta && (e.originalEvent.wheelDelta > 0 ? 1 : -1)) ||  // chrome
+																								// & ie
+	(e.originalEvent.detail && (e.originalEvent.detail > 0 ? -1 : 1));            // firefox
+    
+	if(delta > 0) {
+		// wheel up
+		if(SYSDEBUG) {
+			console.log("wheelup");
+		}
+		drawCalendarTable(getNextYearMonth(parseInt(displayingYearMonth.substring(0, 4)), parseInt(displayingYearMonth.substring(4, 6)), -1) + "01");
+	} else if (delta < 0) {
+		// wheel down
+		if(SYSDEBUG) {
+			console.log("wheeldown");
+		}
+		drawCalendarTable(getNextYearMonth(parseInt(displayingYearMonth.substring(0, 4)), parseInt(displayingYearMonth.substring(4, 6)), 1) + "01");
+	}
+}
+
+/**
+ * Mouse Wheel Event For Year View
+ * @param e event
+ */
+function mouseWheelEventForYear(e) {
+	
+    var delta = (e.originalEvent.wheelDelta && (e.originalEvent.wheelDelta > 0 ? 1 : -1)) ||  // chrome
+																								// & ie
+	(e.originalEvent.detail && (e.originalEvent.detail > 0 ? -1 : 1));            // firefox
+    
+	if(delta > 0) {
+		// wheel up
+		if(SYSDEBUG) {
+			console.log("wheelup");
+		}
+		// TODO
+	} else if (delta < 0) {
+		// wheel down
+		if(SYSDEBUG) {
+			console.log("wheeldown");
+		}
+		// TODO
+	}
 }
