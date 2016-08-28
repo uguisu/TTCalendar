@@ -33,7 +33,6 @@
 	            
                 <%-- Calendar Table [Start] --%>
                 <div class='mainCalendarTableWrap' id='mainCalendarTableWrap'>
-                    <s:include value="resource/page/main/mainCalendarTable.jsp"></s:include>
                 </div>
                 <%-- Calendar Table [End] --%>
             </div>

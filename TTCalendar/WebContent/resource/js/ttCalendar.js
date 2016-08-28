@@ -7,6 +7,7 @@ function init() {
 
 	// [1]Get current date from server and draw the table
 	commonPost("json/TAJ1000Action", "", function(jData) {
+		drawMonthView();
 		drawCalendarTable(jData.currentDate);
 	});
 	
@@ -30,8 +31,11 @@ function init() {
     	if(SYSDEBUG) {
     		console.log("Month button");
     	}
+    	
     	// Show monthly view
-    	$('#mainCalendarTableWrap').show();
+    	drawMonthView();
+    	drawCalendarTable(displayingYearMonth);
+    	
     	// bind event
     	bindEventWhenSwitchToMonth();
 	});
@@ -40,8 +44,9 @@ function init() {
     	if(SYSDEBUG) {
     		console.log("Year button");
     	}
-    	// Hide monthly view
-    	$('#mainCalendarTableWrap').hide();
+    	
+    	// Show yearly view
+    	$('#mainCalendarTableWrap').empty();
     	
     	// bind event
     	bindEventWhenSwitchToYear();
